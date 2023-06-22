@@ -5,9 +5,9 @@ export default class MessageService {
   async sendMessage(from, to, message) {
     await (new MongoAction()).pushMessageToOne('Guid', from, 'players', JSON.stringify({From: from, To: to, MessageText: message} as IMessage));
     await (new MongoAction()).pushMessageToOne('Guid', to, 'players', JSON.stringify({From: from, To: to, MessageText: message} as IMessage));
-    const ws = wsClientInstanses.find(item => item.Guid == to);
+    const ws = wsClientInstanses.find(item => item.Guid == to && item.Type == IWsChannelType.MESSENGER);
     if(ws) {
-      ws.Instance.send(JSON.stringify({From: from, To: to, MessageText: message} as IMessage));
+      ws.Handle.send(JSON.stringify({From: from, To: to, MessageText: message} as IMessage));
     }
   }
   async fetchAllMessagesOfUser(userGuid) {

@@ -1,3 +1,8 @@
+declare enum IWsChannelType {
+  MESSENGER,
+  PLAYER
+}
+
 interface IUser {
   Username: string,
   Password: string,
@@ -21,7 +26,18 @@ interface IMessage {
   MessageText: string
 }
 
-interface IWsMap {
+interface IWsChannel {
   Guid: string,
-  Instance
+  Handle: any,
+  Type: IWsChannelType
+}
+
+interface IPlayerInfo {
+  Guid: string,
+  WorldX: number,
+  WorldY: number,
+  WorldZ: number,
+  RotateX: number,
+  RotateY: number,
+  RotateZ: number
 }

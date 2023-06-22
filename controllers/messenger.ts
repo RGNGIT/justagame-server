@@ -20,16 +20,18 @@ class Messenger {
       const { selfGuid, userGuid } = req.query;
       const ms = new MessageService();
       const messages = await ms.fetchAllMessagesOfUser(selfGuid);
+      if(!messages) {
+        res.send("NO_MESSAGES");
+        return;
+      }
       let temp: Array<IMessage> = [];
       for(const message of messages) {
         const parsedMessage: IMessage = JSON.parse(message) as IMessage;
-        if(parsedMessage.To == userGuid) {
+        if(parsedMessage.To == userGuid || parsedMessage.From == userGuid) {
           temp.push(parsedMessage);
         }
       }
-      console.log("Сука");
-      console.log(temp);
-      res.send(temp.length > 0 ? temp : "NO_MESSAGES");
+      res.send(temp);
     } catch (err) {
       res.send(err);
     }
